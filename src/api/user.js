@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '../utils/request'
 
 /**
  *  用户登录
@@ -15,6 +15,25 @@ export function login (username, password) {
       username,
       password
     }
+  })
+}
+
+export function logout () {
+  return request({
+    url: '/admin/logout',
+    method: 'post'
+  })
+}
+
+/**
+ *  获取登录用户信息
+ *
+ * @returns {*}
+ */
+export function getInfo () {
+  return request({
+    url: '/admin/info',
+    method: 'get'
   })
 }
 
