@@ -23,19 +23,29 @@
                                 :index="subItem.url"
                                 :key="subItem.url"
                             >
-                              <i :class="subItem.icon"></i>
-                                <template v-slot:title>{{ subItem.label }}</template>
+                                <template v-slot:title>
+                                  <i :class="subItem.icon"></i>
+                                  <span slot="title">{{ subItem.label }}</span>
+                                </template>
                                 <el-menu-item
                                     v-for="(threeItem,i) in subItem.children"
                                     :key="i"
                                     :index="threeItem.url"
-                                >{{ threeItem.label }}</el-menu-item>
+                                >
+                                  <template v-slot:title>
+                                    <i :class="threeItem.icon"></i>
+                                    <span slot="title">{{ threeItem.label }}</span>
+                                  </template>
+                                </el-menu-item>
                             </el-submenu>
                             <el-menu-item
                                 v-else
                                 :index="subItem.url"
                                 :key="subItem.url"
-                            >{{ subItem.label }}</el-menu-item>
+                            >
+                              <i :class="subItem.icon"></i>
+                              <span slot="title"> {{ subItem.label }}</span>
+                            </el-menu-item>
                         </template>
                     </el-submenu>
                 </template>
@@ -53,7 +63,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import bus from '../common/bus'
-import { getMenuTreeByUserId } from '@/api/menu'
 export default {
   data () {
     return {
@@ -61,14 +70,6 @@ export default {
     }
   },
   methods: {
-    /**
-     * 加载菜单
-     */
-    getMenuTree: function () {
-      getMenuTreeByUserId(1).then(response => {
-        this.menus = response.data
-      })
-    }
   },
   computed: {
     onRoutes () {
@@ -84,7 +85,6 @@ export default {
       this.collapse = msg
       bus.$emit('collapse-content', msg)
     })
-    // this.getMenuTree()
   }
 }
 </script>

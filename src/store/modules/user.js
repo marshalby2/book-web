@@ -49,7 +49,6 @@ const user = {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           removeToken()
-          console.log('退出成功')
           resolve()
         }).catch(error => {
           reject(error)
