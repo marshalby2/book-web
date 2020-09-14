@@ -22,3 +22,7 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+# Thanks
+[vue-manage-system](https://github.com/lin-xin/vue-manage-system)
