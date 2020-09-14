@@ -1,4 +1,4 @@
-import request from '../utils/request'
+import request from '@/utils/request'
 
 /**
  *  用户登录
@@ -18,9 +18,12 @@ export function login (username, password) {
   })
 }
 
+/**
+ * 退出
+ */
 export function logout () {
   return request({
-    url: '/admin/logout',
+    url: '/user/logout',
     method: 'post'
   })
 }
@@ -30,9 +33,9 @@ export function logout () {
  *
  * @returns {*}
  */
-export function getInfo () {
+export function getUserInfo () {
   return request({
-    url: '/admin/info',
+    url: '/user/getUserInfo',
     method: 'get'
   })
 }

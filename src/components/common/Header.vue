@@ -28,20 +28,21 @@
                     <span class="btn-bell-badge" v-if="message"></span>
                 </div>
                 <!-- 用户头像 -->
-                <div class="user-avator">
-                    <img src="../../assets/img/img.jpg" />
+                <div class="user-avatar">
+<!--                    <img src="../../assets/img/img.jpg" />-->
+                    <img :src="avatar" />
                 </div>
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
-                        {{username}}
+                        {{name}}
                         <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                         <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
                             <el-dropdown-item>项目仓库</el-dropdown-item>
                         </a>
-                        <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+                        <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
@@ -50,27 +51,28 @@
 </template>
 <script>
 import bus from '../common/bus'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
       collapse: false,
       fullscreen: false,
-      name: 'linxin',
       message: 2
     }
   },
   computed: {
-    username () {
-      const username = localStorage.getItem('ms_username')
-      return username || this.name
-    }
+    ...mapGetters([
+      'name',
+      'avatar'
+    ])
   },
   methods: {
     // 用户名下拉菜单选择事件
     handleCommand (command) {
-      if (command === 'loginout') {
-        localStorage.removeItem('ms_username')
-        this.$router.push('/login')
+      if (command === 'logout') {
+        this.$store.dispatch('LogOut').then(() => {
+          location.reload() // 为了重新实例化vue-router对象 避免bug
+        })
       }
     },
     // 侧边栏折叠
@@ -172,10 +174,10 @@ export default {
 .user-name {
     margin-left: 10px;
 }
-.user-avator {
+.user-avatar {
     margin-left: 20px;
 }
-.user-avator img {
+.user-avatar img {
     display: block;
     width: 40px;
     height: 40px;

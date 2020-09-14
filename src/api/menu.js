@@ -7,12 +7,19 @@ import request from '@/utils/request'
  * @param parentId 菜单父ID
  */
 export function getMenuTree (lazy, parentId) {
-  request({
+  return request({
     url: '/menu/tree',
     method: 'get',
-    data: {
+    params: {
       lazy: lazy,
       parentId: parentId
     }
+  })
+}
+
+export function getMenuTreeByUserId (userId) {
+  return request({
+    url: '/menu/tree/' + userId,
+    method: 'get'
   })
 }

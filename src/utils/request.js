@@ -1,13 +1,16 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 
+import store from '../store'
+import { getToken } from '@/utils/auth'
+
 /**
  *  create axios instance
  * @type {AxiosInstance}
  */
 const service = axios.create({
   // url = base url + request url
-  baseURL: 'http://localhost:9527',
+  baseURL: '/api',
   // request timeouts
   timeout: 5000
 })
@@ -18,7 +21,9 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // TODO
-    //  do something before request
+    if (store.getters.token) {
+      config.headers['book-token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+    }
     return config
   },
   error => {
@@ -44,7 +49,7 @@ service.interceptors.response.use(
         type: 'error',
         duration: 3 * 1000
       })
-      return Promise.reject
+      return Promise.reject(new Error(res.message))
     } else {
       return response.data
     }

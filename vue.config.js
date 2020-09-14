@@ -6,8 +6,6 @@ function resolve (dir) {
 }
 
 /**
- *  如果创建config文件夹，在里面写一个index.js文件，把配置文件都写在里面的话，端口号配置不会生效，
- *  可是如果把配置信息写在这里，则跨域配置不会生效，发一次任意的GET/POST请求，会附带一个OPTIONS请求
  * @type {{devServer: {port: number, host: string}, chainWebpack: chainWebpack}}
  */
 module.exports = {
@@ -24,6 +22,16 @@ module.exports = {
   },
   devServer: {
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 9500 // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 9500, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    proxy: {
+      '/api': {
+        target: 'http://localhost:9527', // 你要跨域的网址  比如  'http://news.baidu.com',
+        // secure: true, // 如果是https接口，需要配置这个参数
+        changeOrigin: true, // 这个参数是用来回避跨站问题的，配置完之后发请求时会自动修改http header里面的host，但是不会修改别的
+        pathRewrite: {
+          '^/api': '' // 路径的替换规则
+        }
+      }
+    }
   }
 }
