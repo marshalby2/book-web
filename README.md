@@ -1,4 +1,3 @@
-# book-web
 
 ## Project setup
 ```
