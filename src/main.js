@@ -11,6 +11,8 @@ import './assets/css/icon.css'
 import './components/common/directives'
 import 'babel-polyfill'
 
+import mypgination from './components/mypagination'
+
 import '@/permission' // permission control
 
 Vue.config.productionTip = false
@@ -18,6 +20,7 @@ Vue.use(VueI18n)
 Vue.use(ElementUI, {
   size: 'small'
 })
+Vue.use(mypgination)
 const i18n = new VueI18n({
   locale: 'zh',
   messages

@@ -17,9 +17,39 @@ export function getMenuTree (lazy, parentId) {
   })
 }
 
+/**
+ *  查询菜单树
+ *
+ * @param userId
+ */
 export function getMenuTreeByUserId (userId) {
   return request({
     url: '/menu/tree/' + userId,
+    method: 'get'
+  })
+}
+
+/**
+ *  分页查询
+ *
+ * @param params
+ */
+export function getByPage (params) {
+  return request({
+    url: '/menu/page',
+    method: 'get',
+    params: params
+  })
+}
+
+/**
+ *  获取详细信息
+ *
+ * @param id
+ */
+export function getDetail (id) {
+  return request({
+    url: '/menu/detail/' + id,
     method: 'get'
   })
 }

@@ -22,7 +22,7 @@ service.interceptors.request.use(
   config => {
     // TODO
     if (store.getters.token) {
-      config.headers['book-token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+      config.headers['my-token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     }
     return config
   },
