@@ -39,8 +39,8 @@
                         <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
-                            <el-dropdown-item>项目仓库</el-dropdown-item>
+                        <a href="https://github.com/marshalby2/book-web" target="_blank">
+                            <el-dropdown-item>github</el-dropdown-item>
                         </a>
                         <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
