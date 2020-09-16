@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import id from 'element-ui/src/locale/lang/id'
 
 /**
  *  加载菜单树
@@ -51,5 +52,30 @@ export function getDetail (id) {
   return request({
     url: '/menu/detail/' + id,
     method: 'get'
+  })
+}
+
+/**
+ *  保存
+ *
+ * @param data
+ */
+export function save (data) {
+  return request({
+    url: '/menu/save',
+    method: 'post',
+    data: data
+  })
+}
+
+/**
+ *  删除
+ *
+ * @param id
+ */
+export function remove (id) {
+  return request({
+    url: '/menu/delete/' + id,
+    method: 'delete'
   })
 }
