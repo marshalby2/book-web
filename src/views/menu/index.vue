@@ -43,22 +43,22 @@
             {{(data.current - 1 ) * data.size + scope.$index + 1}}
           </template>
         </el-table-column>
-        <el-table-column prop="label" label="名称" width="120px"></el-table-column>
-        <el-table-column prop="url" label="路径" width="120px"></el-table-column>
+        <el-table-column prop="label" label="名称" width="180"></el-table-column>
+        <el-table-column prop="url" label="路径" width="180"></el-table-column>
         <el-table-column prop="parent" label="上级菜单"></el-table-column>
-        <el-table-column prop="icon" label="图标" align="center" width="80px">
+        <el-table-column prop="icon" label="图标" align="center" width="100">
           <template slot-scope="scope">
             <i :class="scope.row.icon"></i>
           </template>
         </el-table-column>
-        <el-table-column prop="sort" label="排序" align="center" width="80px"></el-table-column>
+        <el-table-column prop="sort" label="排序" align="center" width="100"></el-table-column>
         <el-table-column prop="createTime" label="创建时间">
           <template slot-scope="scope">
             <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{scope.row.createTime}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="operate" label="操作" width="200" align="center">
+        <el-table-column prop="operate" label="操作" width="220" align="center">
           <template slot-scope="scope">
             <el-button-group>
               <el-tooltip content="编辑" placement="top">
@@ -135,10 +135,6 @@ export default {
       this.query.current = current || this.data.current
       this.query.size = size || this.data.size
       this.query.parentId = Object.assign([], this.cascaderValues).pop()
-      // if (this.cascaderValues.length > 0) {
-      //   this.query.parentId = this.cascaderValues.pop()
-      // }
-      debugger
       getByPage(this.query).then(res => {
         this.data = res.data
       })

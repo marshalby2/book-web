@@ -1,152 +1,156 @@
 <template>
-    <div>
-        <div class="crumbs">
-            <el-breadcrumb separator="/">
-                <el-breadcrumb-item>
-                    <i class="el-icon-lx-calendar"></i> 表单
-                </el-breadcrumb-item>
-                <el-breadcrumb-item>基本表单</el-breadcrumb-item>
-            </el-breadcrumb>
-        </div>
-        <div class="container">
-            <div class="form-box">
-                <el-form ref="form" :model="form" label-width="80px">
-                    <el-form-item label="表单名称">
-                        <el-input v-model="form.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="选择器">
-                        <el-select v-model="form.region" placeholder="请选择">
-                            <el-option key="bbk" label="步步高" value="bbk"></el-option>
-                            <el-option key="xtc" label="小天才" value="xtc"></el-option>
-                            <el-option key="imoo" label="imoo" value="imoo"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="日期时间">
-                        <el-col :span="11">
-                            <el-date-picker
-                                type="date"
-                                placeholder="选择日期"
-                                v-model="form.date1"
-                                value-format="yyyy-MM-dd"
-                                style="width: 100%;"
-                            ></el-date-picker>
-                        </el-col>
-                        <el-col class="line" :span="2">-</el-col>
-                        <el-col :span="11">
-                            <el-time-picker
-                                placeholder="选择时间"
-                                v-model="form.date2"
-                                style="width: 100%;"
-                            ></el-time-picker>
-                        </el-col>
-                    </el-form-item>
-                    <el-form-item label="城市级联">
-                        <el-cascader :options="options" v-model="form.options"></el-cascader>
-                    </el-form-item>
-                    <el-form-item label="选择开关">
-                        <el-switch v-model="form.delivery"></el-switch>
-                    </el-form-item>
-                    <el-form-item label="多选框">
-                        <el-checkbox-group v-model="form.type">
-                            <el-checkbox label="步步高" name="type"></el-checkbox>
-                            <el-checkbox label="小天才" name="type"></el-checkbox>
-                            <el-checkbox label="imoo" name="type"></el-checkbox>
-                        </el-checkbox-group>
-                    </el-form-item>
-                    <el-form-item label="单选框">
-                        <el-radio-group v-model="form.resource">
-                            <el-radio label="步步高"></el-radio>
-                            <el-radio label="小天才"></el-radio>
-                            <el-radio label="imoo"></el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                    <el-form-item label="文本框">
-                        <el-input type="textarea" rows="5" v-model="form.desc"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="onSubmit">表单提交</el-button>
-                        <el-button>取消</el-button>
-                    </el-form-item>
-                </el-form>
-            </div>
-        </div>
-    </div>
+  <div class="container">
+    <!--  查询区  -->
+    <el-card>
+      <el-form :model="query" label-width="100px">
+        <el-row :gutter="24">
+          <el-col :span="8">
+            <el-form-item label="名称:">
+              <el-input v-model="query.name" placeholder="名称" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="角色:">
+              <el-input v-model="query.roleId" placeholder="角色" clearable></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row style="text-align: center">
+          <el-button type="primary" icon="el-icon-plus" @click="add">新增</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="loadData(1)">查询</el-button>
+        </el-row>
+      </el-form>
+    </el-card>
+    <!--  数据展示区  -->
+    <el-card style="margin-top: 5px">
+      <el-table :data="data.records" border class="table">
+        <el-table-column prop="xh" label="序号" width="80" align="center">
+          <template slot-scope="scope">
+            {{(data.current - 1 ) * data.size + scope.$index + 1}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="username" label="用户名" width="120"></el-table-column>
+        <el-table-column prop="nickName" label="昵称" width="180"></el-table-column>
+        <el-table-column prop="icon" label="头像" align="center" width="100">
+          <template slot-scope="scope">
+              <el-image
+                class="avatar"
+                :src="scope.row.avatar"
+                :preview-src-list="[scope.row.avatar]"
+              ></el-image>
+          </template>
+        </el-table-column>
+        <el-table-column prop="role" label="角色" width="100"></el-table-column>
+        <el-table-column prop="enable" label="是否启用" width="100">
+          <template>
+            <el-switch
+              v-model="data.enable"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column prop="createTime" label="创建时间">
+          <template slot-scope="scope">
+            <i class="el-icon-time"></i>
+            <span style="margin-left: 10px">{{scope.row.createTime}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="operate" label="操作" width="220" align="center">
+          <template slot-scope="scope">
+            <el-button-group>
+              <el-tooltip content="编辑" placement="top">
+                <el-button type="primary" icon="el-icon-edit" size="small" @click="edit(scope.row.id)"></el-button>
+              </el-tooltip>
+              <el-tooltip content="查看" placement="top">
+                <el-button type="success" icon="el-icon-menu" size="small" @click="show(scope.row.id)"></el-button>
+              </el-tooltip>
+              <el-tooltip content="删除" placement="top">
+                <el-button type="danger" icon="el-icon-delete" size="small" @click="remove(scope.row.id)"></el-button>
+              </el-tooltip>
+            </el-button-group>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!--   分页组件   -->
+      <my-pagination :page-data="data" @step="loadData"></my-pagination>
+    </el-card>
+  </div>
 </template>
 
 <script>
+import { getByPage, remove } from '@/api/user'
 export default {
-  name: 'baseform',
+  name: 'index',
+  props: {},
+  components: {},
+  computed: {},
   data () {
     return {
-      options: [
-        {
-          value: 'guangdong',
-          label: '广东省',
-          children: [
-            {
-              value: 'guangzhou',
-              label: '广州市',
-              children: [
-                {
-                  value: 'tianhe',
-                  label: '天河区'
-                },
-                {
-                  value: 'haizhu',
-                  label: '海珠区'
-                }
-              ]
-            },
-            {
-              value: 'dongguan',
-              label: '东莞市',
-              children: [
-                {
-                  value: 'changan',
-                  label: '长安镇'
-                },
-                {
-                  value: 'humen',
-                  label: '虎门镇'
-                }
-              ]
-            }
-          ]
-        },
-        {
-          value: 'hunan',
-          label: '湖南省',
-          children: [
-            {
-              value: 'changsha',
-              label: '长沙市',
-              children: [
-                {
-                  value: 'yuelu',
-                  label: '岳麓区'
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: true,
-        type: ['步步高'],
-        resource: '小天才',
-        desc: '',
-        options: []
-      }
+      query: {},
+      data: {}
     }
   },
+  mounted () {
+  },
+  created () {
+    this.loadData()
+  },
   methods: {
-    onSubmit () {
-      this.$message.success('提交成功！')
+    /**
+     * 加载数据
+     *
+     * @param current 当前页(分页组件传过来的值)
+     * @param size 分页尺寸(分页组件传过来的值)
+     */
+    loadData (current, size) {
+      this.query.current = current || this.data.current
+      this.query.size = size || this.data.size
+      getByPage(this.query).then(res => {
+        this.data = res.data
+      })
+    },
+    add () {
+      this.params = { id: null, isSubmit: true }
+      this.detailVisible = true
+    },
+    edit (id) {
+      this.params = { id: id, isSubmit: true }
+      this.detailVisible = true
+    },
+    show (id) {
+      this.params = { id: id, isSubmit: false }
+      this.detailVisible = true
+    },
+    remove (id) {
+      this.$confirm('确定要删除吗？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.thisLoading = true
+        remove(id).then(res => {
+          if (res.code === 200) {
+            this.$message.success(res.message)
+            this.loadMenuTree()
+            this.loadData()
+          } else {
+            this.$message.error(res.message)
+          }
+        })
+      })
+    },
+    detailClose () {
+      this.params = {}
+      this.loadData()
     }
   }
 }
 </script>
+
+<style scoped>
+  .avatar {
+    display: block;
+    margin: auto;
+    width: 40px;
+    height: 40px;
+  }
+</style>

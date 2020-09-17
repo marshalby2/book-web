@@ -1,37 +1,30 @@
 <template>
    <el-dialog title="详细信息" :visible.sync="thisVisible" :before-close="close" @open="open">
      <el-form
-      ref="dataForm"
+      ref="form"
       label-position="right"
       :model="data"
       :rules="rules"
       label-width="150px"
       v-loading="thisLoading"
      >
-      <el-form-item label="名称" prop="label">
-        <el-input v-model="data.label" placeholder="请输入名称"></el-input>
+      <el-form-item label="用户名" prop="label">
+        <el-input v-model="data.username" placeholder="请输入用户名"></el-input>
       </el-form-item>
-      <el-form-item label="url" prop="url">
-        <el-input v-model="data.url" placeholder="请输入路径"></el-input>
+      <el-form-item label="密码" prop="password">
+        <el-input type="password" v-model="data.password" placeholder="请输入密码"></el-input>
       </el-form-item>
-      <el-form-item label="图标" prop="icon">
-        <el-input v-model="data.icon" placeholder="请输入图标"></el-input>
+      <el-form-item label="头像" prop="avatar">
+        <el-input v-model="data.avatar" ></el-input>
       </el-form-item>
-       <el-form-item v-model="data.parentId" label="上级菜单">
-         <el-cascader
-           v-model="data.parentId"
-           :options="menuTree"
-           :props="cascaderProps"
-           style="width: 100%"
-           :show-all-levels="false"
-           filterable
-           clearable
-           @change="handleSelectParent"
-         >
-         </el-cascader>
+       <el-form-item label="昵称" prop="nickName">
+         <el-input v-model="data.nickName" placeholder="请输入昵称"></el-input>
        </el-form-item>
-       <el-form-item label="排序值" prop="sort">
-         <el-input-number v-model="data.sort" controls-position="right" :min="0"/>
+       <el-form-item label="邮箱" prop="email">
+         <el-input v-model="data.email" placeholder="请输入邮箱"></el-input>
+       </el-form-item>
+       <el-form-item label="是否启用" prop="enable">
+         <el-input v-model="data.enable" placeholder="请输入邮箱"></el-input>
        </el-form-item>
      </el-form>
      <el-row v-if="params.isSubmit">
@@ -73,25 +66,8 @@ export default {
       thisVisible: this.visible,
       thisParams: this.params,
       data: {},
-      rules: {
-        label: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
-        ],
-        url: [
-          { required: true, message: '请输入url', trigger: 'blur' }
-        ],
-        icon: [
-          { required: true, message: '请输入图标', trigger: 'blur' }
-        ]
-      },
-      thisLoading: true,
-      // 菜单树数据和级联选择器属性映射关系
-      cascaderProps: {
-        label: 'label',
-        value: 'id',
-        children: 'children',
-        checkStrictly: true
-      }
+      rules: {},
+      thisLoading: true
     }
   },
   mounted () {
@@ -104,8 +80,6 @@ export default {
       this.thisVisible = false
       this.thisParams = {}
       this.data = {}
-      // 清除字段校验效果
-      this.$refs.dataForm.resetFields()
       // 通知父页面
       this.$emit('update:visible', false)
       this.$emit('close')
@@ -125,19 +99,13 @@ export default {
       }
     },
     save () {
-      this.$refs.dataForm.validate((valid) => {
-        if (valid) {
-          save(this.data).then(res => {
-            if (res.code === 200) {
-              this.$message.success(res.message)
-              this.loadMenuTree()
-              this.close()
-            } else {
-              this.$message.error(res.message)
-            }
-          })
+      save(this.data).then(res => {
+        if (res.code === 200) {
+          this.$message.success(res.message)
+          this.loadMenuTree()
+          this.close()
         } else {
-          this.$message.error('请将表单数据填写完整')
+          this.$message.error(res.message)
         }
       })
     },
