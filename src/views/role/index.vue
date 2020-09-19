@@ -5,20 +5,13 @@
       <el-form :model="query" label-width="100px">
         <el-row :gutter="24">
           <el-col :span="8">
-            <el-form-item label="名称:">
+            <el-form-item label="角色名称:">
               <el-input v-model="query.name" placeholder="名称" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="角色" prop="roles">
-              <el-select size="medium" v-model="query.roles" multiple placeholder="请选择角色" clearable>
-                <el-option
-                  v-for="item in roles"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id">
-                </el-option>
-              </el-select>
+            <el-form-item label="角色标识:">
+              <el-input v-model="query.code" placeholder="标识" clearable></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -36,24 +29,9 @@
             {{(data.current - 1 ) * data.size + scope.$index + 1}}
           </template>
         </el-table-column>
-        <el-table-column prop="username" label="用户名" width="120"></el-table-column>
-        <el-table-column prop="nickName" label="昵称" width="180"></el-table-column>
-        <el-table-column prop="icon" label="头像" align="center" width="100">
-          <template slot-scope="scope">
-            <el-image
-              class="avatar"
-              :src="scope.row.avatar"
-              :preview-src-list="[scope.row.avatar]"
-            ></el-image>
-          </template>
-        </el-table-column>
-        <el-table-column prop="role" label="角色" width="100"></el-table-column>
-        <el-table-column prop="enable" label="是否启用" width="100">
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.enable"  type="success"> 启用</el-tag>
-            <el-tag v-if="!scope.row.enable"  type="info"> 禁用</el-tag>
-          </template>
-        </el-table-column>
+        <el-table-column prop="name" label="角色名称" width="200"></el-table-column>
+        <el-table-column prop="code" label="角色标识" width="200"></el-table-column>
+        <el-table-column prop="remark" label="备注" width="200"></el-table-column>
         <el-table-column prop="createTime" label="创建时间">
           <template slot-scope="scope">
             <i class="el-icon-time"></i>
@@ -85,8 +63,7 @@
 </template>
 
 <script>
-import { getByPage, remove } from '@/api/user'
-import { getList } from '@/api/role'
+import { getByPage, remove } from '@/api/role'
 import detail from './detail'
 
 export default {
@@ -106,15 +83,13 @@ export default {
         current: 1,
         size: 10,
         total: 0
-      },
-      roles: []
+      }
     }
   },
   mounted () {
   },
   created () {
     this.loadData()
-    this.loadRole()
   },
   methods: {
     /**
@@ -169,13 +144,6 @@ export default {
     detailClose () {
       this.params = {}
       this.loadData()
-    },
-    loadRole () {
-      getList().then(res => {
-        if (res.code === 200) {
-          this.roles = res.data
-        }
-      })
     }
   }
 }

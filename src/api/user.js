@@ -48,7 +48,7 @@ export function getUserInfo () {
  */
 export function save (data) {
   return request({
-    url: '/usr/save',
+    url: '/user/save',
     method: 'post',
     data: data
   })

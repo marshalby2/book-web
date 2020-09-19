@@ -111,6 +111,11 @@ export default new Router({
           path: '/user',
           component: () => import('@/views/user/index'),
           meta: { title: '用户管理' }
+        },
+        {
+          path: '/role',
+          component: () => import('@/views/role/index'),
+          meta: { title: '角色管理' }
         }
       ]
     },

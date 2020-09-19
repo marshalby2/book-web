@@ -1,44 +1,61 @@
 <template>
-   <el-dialog title="详细信息" :visible.sync="thisVisible" :before-close="close" @open="open">
-     <el-form
+  <el-dialog title="详细信息" :visible.sync="thisVisible" :before-close="close" @open="open">
+    <el-form
       ref="form"
       label-position="right"
       :model="data"
       :rules="rules"
       label-width="150px"
       v-loading="thisLoading"
-     >
-      <el-form-item label="用户名" prop="label">
+    >
+      <el-form-item label="用户名" prop="username">
         <el-input v-model="data.username" placeholder="请输入用户名"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
         <el-input type="password" v-model="data.password" placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item label="头像" prop="avatar">
-        <el-input v-model="data.avatar" ></el-input>
+        <el-input v-model="data.avatar"></el-input>
       </el-form-item>
-       <el-form-item label="昵称" prop="nickName">
-         <el-input v-model="data.nickName" placeholder="请输入昵称"></el-input>
-       </el-form-item>
-       <el-form-item label="邮箱" prop="email">
-         <el-input v-model="data.email" placeholder="请输入邮箱"></el-input>
-       </el-form-item>
-       <el-form-item label="是否启用" prop="enable">
-         <el-input v-model="data.enable" placeholder="请输入邮箱"></el-input>
-       </el-form-item>
-     </el-form>
-     <el-row v-if="params.isSubmit">
-       <el-col style="text-align: center">
-         <el-button type="primary" icon="el-icon-check" @click="save">保存</el-button>
-         <el-button type="danger" icon="el-icon-close" @click="close">关闭</el-button>
-       </el-col>
-     </el-row>
-   </el-dialog>
+      <el-form-item label="昵称" prop="nickName">
+        <el-input v-model="data.nickName" placeholder="请输入昵称"></el-input>
+      </el-form-item>
+      <el-form-item label="邮箱" prop="email">
+        <el-input v-model="data.email" placeholder="请输入邮箱"></el-input>
+      </el-form-item>
+      <el-form-item label="角色" prop="roles">
+        <el-select width="100%" v-model="data.roles" multiple placeholder="请选择角色" clearable>
+          <el-option
+            v-for="item in roles"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="是否启用" prop="enable">
+        <template>
+          <el-switch
+            v-model="data.enable"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+          </el-switch>
+        </template>
+      </el-form-item>
+    </el-form>
+    <el-row v-if="params.isSubmit">
+      <el-col style="text-align: center">
+        <el-button type="primary" icon="el-icon-check" @click="save">保存</el-button>
+        <el-button type="danger" icon="el-icon-close" @click="close">关闭</el-button>
+      </el-col>
+    </el-row>
+  </el-dialog>
 </template>
 
 <script>
-import { getDetail, save } from '../../api/menu'
-import { mapGetters } from 'vuex'
+import { getDetail, save } from '../../api/user'
+import { getList } from '@/api/role'
+
 export default {
   name: 'detail',
   props: {
@@ -56,23 +73,50 @@ export default {
     }
   },
   components: {},
-  computed: {
-    ...mapGetters([
-      'menuTree'
-    ])
-  },
+  computed: {},
   data () {
     return {
       thisVisible: this.visible,
       thisParams: this.params,
+      roles: [],
       data: {},
-      rules: {},
+      rules: {
+        username: [
+          {
+            required: true,
+            message: '请输入名称',
+            trigger: 'blur'
+          }
+        ],
+        password: [
+          {
+            required: true,
+            message: '请输入密码',
+            trigger: 'blur'
+          }
+        ],
+        avatar: [
+          {
+            required: true,
+            message: '请输入头像地址',
+            trigger: 'blur'
+          }
+        ],
+        roles: [
+          {
+            required: true,
+            message: '请选择角色',
+            trigger: 'blur'
+          }
+        ]
+      },
       thisLoading: true
     }
   },
   mounted () {
   },
   created () {
+    this.loadRole()
   },
   methods: {
     close () {
@@ -102,7 +146,6 @@ export default {
       save(this.data).then(res => {
         if (res.code === 200) {
           this.$message.success(res.message)
-          this.loadMenuTree()
           this.close()
         } else {
           this.$message.error(res.message)
@@ -116,13 +159,11 @@ export default {
         this.data.parentId = -1
       }
     },
-    loadMenuTree () {
-      const param = {
-        lazy: false,
-        parentId: null
-      }
-      this.$store.dispatch('GetMenuTree', param).then(res => {
-        // this.menuTree = res.data
+    loadRole () {
+      getList().then(res => {
+        if (res.code === 200) {
+          this.roles = res.data
+        }
       })
     }
   }
