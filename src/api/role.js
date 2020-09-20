@@ -39,6 +39,18 @@ export function getList (params) {
 }
 
 /**
+ *  查询所有
+ *
+ * @param params
+ */
+export function getListByUser (userId) {
+  return request({
+    url: '/role/list/' + userId,
+    method: 'get'
+  })
+}
+
+/**
  *  获取详细信息
  *
  * @param id
@@ -59,5 +71,18 @@ export function remove (id) {
   return request({
     url: '/role/delete/' + id,
     method: 'delete'
+  })
+}
+
+/**
+ *  保持角色菜单关系
+ *
+ * @param data
+ */
+export function saveRole (data) {
+  return request({
+    url: '/role/saveRole/',
+    method: 'post',
+    data: data
   })
 }

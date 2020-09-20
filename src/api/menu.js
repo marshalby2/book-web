@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import id from 'element-ui/src/locale/lang/id'
 
 /**
  *  加载菜单树
@@ -77,5 +76,17 @@ export function remove (id) {
   return request({
     url: '/menu/delete/' + id,
     method: 'delete'
+  })
+}
+
+/**
+ *  根据角色ID查询
+ *
+ * @param params
+ */
+export function getListByRole (roleId) {
+  return request({
+    url: '/menu/list/' + roleId,
+    method: 'get'
   })
 }

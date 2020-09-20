@@ -65,7 +65,7 @@
                 <el-button type="primary" icon="el-icon-edit" size="small" @click="edit(scope.row.id)"></el-button>
               </el-tooltip>
               <el-tooltip content="查看" placement="top">
-                <el-button type="success" icon="el-icon-menu" size="small" @click="show(scope.row.id)"></el-button>
+                <el-button type="info" icon="el-icon-zoom-in" size="small" @click="show(scope.row.id)"></el-button>
               </el-tooltip>
               <el-tooltip content="删除" placement="top">
                 <el-button type="danger" icon="el-icon-delete" size="small" @click="remove(scope.row.id)"></el-button>

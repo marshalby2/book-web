@@ -89,3 +89,16 @@ export function remove (id) {
     method: 'delete'
   })
 }
+
+/**
+ *  分页查询
+ *
+ * @param params
+ */
+export function saveRole (data) {
+  return request({
+    url: '/user/saveRole',
+    method: 'post',
+    data: data
+  })
+}

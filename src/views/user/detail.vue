@@ -1,7 +1,7 @@
 <template>
   <el-dialog title="详细信息" :visible.sync="thisVisible" :before-close="close" @open="open">
     <el-form
-      ref="form"
+      ref="dataForm"
       label-position="right"
       :model="data"
       :rules="rules"
@@ -12,7 +12,7 @@
         <el-input v-model="data.username" placeholder="请输入用户名"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="data.password" placeholder="请输入密码"></el-input>
+        <el-input type="password" v-model="data.newPassword" placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item label="头像" prop="avatar">
         <el-input v-model="data.avatar"></el-input>
@@ -22,16 +22,6 @@
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="data.email" placeholder="请输入邮箱"></el-input>
-      </el-form-item>
-      <el-form-item label="角色" prop="roles">
-        <el-select width="100%" v-model="data.roles" multiple placeholder="请选择角色" clearable>
-          <el-option
-            v-for="item in roles"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id">
-          </el-option>
-        </el-select>
       </el-form-item>
       <el-form-item label="是否启用" prop="enable">
         <template>
@@ -53,8 +43,7 @@
 </template>
 
 <script>
-import { getDetail, save } from '../../api/user'
-import { getList } from '@/api/role'
+import { getDetail, save } from '@/api/user'
 
 export default {
   name: 'detail',
@@ -78,7 +67,6 @@ export default {
     return {
       thisVisible: this.visible,
       thisParams: this.params,
-      roles: [],
       data: {},
       rules: {
         username: [
@@ -101,13 +89,6 @@ export default {
             message: '请输入头像地址',
             trigger: 'blur'
           }
-        ],
-        roles: [
-          {
-            required: true,
-            message: '请选择角色',
-            trigger: 'blur'
-          }
         ]
       },
       thisLoading: true
@@ -116,7 +97,6 @@ export default {
   mounted () {
   },
   created () {
-    this.loadRole()
   },
   methods: {
     close () {
@@ -143,12 +123,18 @@ export default {
       }
     },
     save () {
-      save(this.data).then(res => {
-        if (res.code === 200) {
-          this.$message.success(res.message)
-          this.close()
+      this.$refs.dataForm.validate((valid) => {
+        if (valid) {
+          save(this.data).then(res => {
+            if (res.code === 200) {
+              this.$message.success(res.message)
+              this.close()
+            } else {
+              this.$message.error(res.message)
+            }
+          })
         } else {
-          this.$message.error(res.message)
+          this.$message.error('请将表单数据填写完整')
         }
       })
     },
@@ -158,13 +144,6 @@ export default {
       } else {
         this.data.parentId = -1
       }
-    },
-    loadRole () {
-      getList().then(res => {
-        if (res.code === 200) {
-          this.roles = res.data
-        }
-      })
     }
   }
 }

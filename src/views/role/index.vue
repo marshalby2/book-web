@@ -44,8 +44,11 @@
               <el-tooltip content="编辑" placement="top">
                 <el-button type="primary" icon="el-icon-edit" size="small" @click="edit(scope.row.id)"></el-button>
               </el-tooltip>
+              <el-tooltip content="分配菜单" placement="top">
+                <el-button type="success" icon="el-icon-menu" size="small" @click="menu(scope.row.id)"></el-button>
+              </el-tooltip>
               <el-tooltip content="查看" placement="top">
-                <el-button type="success" icon="el-icon-menu" size="small" @click="show(scope.row.id)"></el-button>
+                <el-button type="info" icon="el-icon-zoom-in" size="small" @click="show(scope.row.id)"></el-button>
               </el-tooltip>
               <el-tooltip content="删除" placement="top">
                 <el-button type="danger" icon="el-icon-delete" size="small" @click="remove(scope.row.id)"></el-button>
@@ -59,17 +62,19 @@
     </el-card>
     <!--  弹出框  -->
     <detail :params="params" :visible.sync="detailVisible" @close="detailClose"></detail>
+    <my-menu :params="params" :visible.sync="menuVisible" @close="menuClose"></my-menu>
   </div>
 </template>
 
 <script>
 import { getByPage, remove } from '@/api/role'
 import detail from './detail'
+import MyMenu from './menu'
 
 export default {
   name: 'index',
   props: {},
-  components: { detail },
+  components: { detail, MyMenu },
   computed: {},
   data () {
     return {
@@ -78,6 +83,7 @@ export default {
       params: {},
       // 子页面可见性
       detailVisible: false,
+      menuVisible: false,
       data: {
         records: [],
         current: 1,
@@ -119,6 +125,12 @@ export default {
       }
       this.detailVisible = true
     },
+    menu (id) {
+      this.params = {
+        id: id
+      }
+      this.menuVisible = true
+    },
     show (id) {
       this.params = {
         id: id,
@@ -144,6 +156,9 @@ export default {
     detailClose () {
       this.params = {}
       this.loadData()
+    },
+    menuClose () {
+      this.params = {}
     }
   }
 }

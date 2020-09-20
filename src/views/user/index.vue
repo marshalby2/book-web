@@ -47,7 +47,13 @@
             ></el-image>
           </template>
         </el-table-column>
-        <el-table-column prop="role" label="角色" width="100"></el-table-column>
+        <el-table-column prop="roles" label="角色" width="300">
+          <template slot-scope="scope">
+            <template v-for="item in scope.row.roles">
+              <el-tag :key="item" type="info" effect="dark" style="margin-right: 10px">{{item}}</el-tag>
+            </template>
+          </template>
+        </el-table-column>
         <el-table-column prop="enable" label="是否启用" width="100">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.enable"  type="success"> 启用</el-tag>
@@ -66,8 +72,11 @@
               <el-tooltip content="编辑" placement="top">
                 <el-button type="primary" icon="el-icon-edit" size="small" @click="edit(scope.row.id)"></el-button>
               </el-tooltip>
+              <el-tooltip content="分配角色" placement="top">
+                <el-button type="success" icon="el-icon-s-check" size="small" @click="role(scope.row.id)"></el-button>
+              </el-tooltip>
               <el-tooltip content="查看" placement="top">
-                <el-button type="success" icon="el-icon-menu" size="small" @click="show(scope.row.id)"></el-button>
+                <el-button type="info" icon="el-icon-zoom-in" size="small" @click="show(scope.row.id)"></el-button>
               </el-tooltip>
               <el-tooltip content="删除" placement="top">
                 <el-button type="danger" icon="el-icon-delete" size="small" @click="remove(scope.row.id)"></el-button>
@@ -81,6 +90,7 @@
     </el-card>
     <!--  弹出框  -->
     <detail :params="params" :visible.sync="detailVisible" @close="detailClose"></detail>
+    <roles :params="params" :visible.sync="roleVisible" @close="detailClose"></roles>
   </div>
 </template>
 
@@ -88,11 +98,12 @@
 import { getByPage, remove } from '@/api/user'
 import { getList } from '@/api/role'
 import detail from './detail'
+import roles from './roles'
 
 export default {
   name: 'index',
   props: {},
-  components: { detail },
+  components: { detail, roles },
   computed: {},
   data () {
     return {
@@ -101,6 +112,7 @@ export default {
       params: {},
       // 子页面可见性
       detailVisible: false,
+      roleVisible: false,
       data: {
         records: [],
         current: 1,
@@ -150,6 +162,12 @@ export default {
         isSubmit: false
       }
       this.detailVisible = true
+    },
+    role (id) {
+      this.params = {
+        id: id
+      }
+      this.roleVisible = true
     },
     remove (id) {
       this.$confirm('确定要删除吗？', '提示', {

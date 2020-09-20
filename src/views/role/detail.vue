@@ -1,7 +1,7 @@
 <template>
    <el-dialog title="详细信息" :visible.sync="thisVisible" :before-close="close" @open="open">
      <el-form
-      ref="form"
+      ref="dataForm"
       label-position="right"
       :model="data"
       :rules="rules"
@@ -93,12 +93,18 @@ export default {
       }
     },
     save () {
-      save(this.data).then(res => {
-        if (res.code === 200) {
-          this.$message.success(res.message)
-          this.close()
+      this.$refs.dataForm.validate((valid) => {
+        if (valid) {
+          save(this.data).then(res => {
+            if (res.code === 200) {
+              this.$message.success(res.message)
+              this.close()
+            } else {
+              this.$message.error(res.message)
+            }
+          })
         } else {
-          this.$message.error(res.message)
+          this.$message.error('请将表单数据填写完整')
         }
       })
     },
