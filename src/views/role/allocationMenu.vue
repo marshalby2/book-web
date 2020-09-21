@@ -7,18 +7,26 @@
       node-key="id"
       ref="tree"
       highlight-current
+      check-on-click-node
+      :check-strictly="true"
       :props="defaultProps">
     </el-tree>
+    <el-row >
+      <el-col style="text-align: center">
+        <el-button type="primary" icon="el-icon-check" @click="save">保存</el-button>
+        <el-button type="danger" icon="el-icon-close" @click="close">关闭</el-button>
+      </el-col>
+    </el-row>
   </el-dialog>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { saveRole } from '@/api/role'
+import { saveMenu } from '@/api/role'
 import { getListByRole } from '@/api/menu'
 
 export default {
-  name: 'menu',
+  name: 'allocationMenu',
   props: {
     visible: Boolean,
     params: {}
@@ -88,9 +96,7 @@ export default {
           const checkedMenuIds = []
           if (menuList !== null && menuList.length > 0) {
             for (let i = 0; i < menuList.length; i++) {
-              if (menuList[i].parentId !== 1) {
-                checkedMenuIds.push(menuList[i].id)
-              }
+              checkedMenuIds.push(menuList[i].id)
             }
           }
           debugger
@@ -100,8 +106,8 @@ export default {
     },
     save () {
       this.data.roleId = this.params.id
-      this.data.menuIds = this.menuIds
-      saveRole(this.data).then(res => {
+      this.data.menuIds = this.$refs.tree.getCheckedKeys()
+      saveMenu(this.data).then(res => {
         if (res.code === 200) {
           this.close()
           this.$message.success(res.message)

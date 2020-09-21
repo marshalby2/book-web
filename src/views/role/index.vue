@@ -69,7 +69,7 @@
 <script>
 import { getByPage, remove } from '@/api/role'
 import detail from './detail'
-import MyMenu from './menu'
+import MyMenu from './allocationMenu'
 
 export default {
   name: 'index',

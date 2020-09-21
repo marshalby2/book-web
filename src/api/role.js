@@ -79,9 +79,9 @@ export function remove (id) {
  *
  * @param data
  */
-export function saveRole (data) {
+export function saveMenu (data) {
   return request({
-    url: '/role/saveRole/',
+    url: '/role/saveMenu/',
     method: 'post',
     data: data
   })

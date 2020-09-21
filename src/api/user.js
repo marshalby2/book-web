@@ -91,7 +91,7 @@ export function remove (id) {
 }
 
 /**
- *  分页查询
+ *  保存用户角色关系
  *
  * @param params
  */

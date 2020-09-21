@@ -11,7 +11,7 @@
       <el-form-item label="用户名" prop="username">
         <el-input v-model="data.username" placeholder="请输入用户名"></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
+      <el-form-item label="密码" prop="newPassword">
         <el-input type="password" v-model="data.newPassword" placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item label="头像" prop="avatar">
@@ -76,7 +76,7 @@ export default {
             trigger: 'blur'
           }
         ],
-        password: [
+        newPassword: [
           {
             required: true,
             message: '请输入密码',

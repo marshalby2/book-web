@@ -98,7 +98,7 @@
 import { getByPage, remove } from '@/api/user'
 import { getList } from '@/api/role'
 import detail from './detail'
-import roles from './roles'
+import roles from './allocationRoles'
 
 export default {
   name: 'index',

@@ -32,7 +32,7 @@ import { getList, getListByUser } from '@/api/role'
 import { saveRole } from '@/api/user'
 
 export default {
-  name: 'roles',
+  name: 'allocationRoles',
   props: {
     visible: Boolean,
     params: {}
