@@ -15,7 +15,7 @@ router.beforeEach((to, from, next) => {
     } else {
       if (store.getters.roles.length === 0) {
         store.dispatch('GetUserInfo').then(res => { // 拉取用户信息
-          next({ path: '/' })
+          next({ ...to, replace: true })
         }).catch((err) => {
           store.dispatch('FedLogOut').then(() => {
             Message.error(err || 'Verification failed, please login again')
