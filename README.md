@@ -1,27 +1,20 @@
 
-## Project setup
+# 前言
+
+Vue练手项目, 目前就实现了实现了登录,用户管理,菜单管理,角色管理这几个功能
+
+# 感谢
+[vue-manage-system](https://github.com/lin-xin/vue-manage-system)
+
+# 运行步骤
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
 ```
 npm run build
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-
-# Thanks
-[vue-manage-system](https://github.com/lin-xin/vue-manage-system)
