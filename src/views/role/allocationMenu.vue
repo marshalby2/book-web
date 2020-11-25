@@ -92,15 +92,15 @@ export default {
     loadMenuByRole (roleId) {
       getListByRole(roleId).then(res => {
         if (res.code === 200) {
-          const menuList = res.data
-          const checkedMenuIds = []
-          if (menuList !== null && menuList.length > 0) {
-            for (let i = 0; i < menuList.length; i++) {
-              checkedMenuIds.push(menuList[i].id)
-            }
-          }
-          debugger
-          this.$refs.tree.setCheckedKeys(checkedMenuIds)
+          // const menuList = res.data
+          // const checkedMenuIds = []
+          // if (menuList !== null && menuList.length > 0) {
+          //   for (let i = 0; i < menuList.length; i++) {
+          //     checkedMenuIds.push(menuList[i].id)
+          //   }
+          // }
+          // this.$refs.tree.setCheckedKeys(checkedMenuIds)
+          this.$refs.tree.setCheckedKeys(res.data.map((item) => item.id))
         }
       })
     },
